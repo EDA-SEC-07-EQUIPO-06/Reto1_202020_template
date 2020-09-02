@@ -17,33 +17,40 @@ def new_catalogo():
     catalogo["directores"]=lt.newList("ARRAY_LIST",compDirectores)
     catalogo["generos"]=lt.newList('SINGLE_LINKED',compGenero)
     catalogo["actores"]=lt.newList("ARRAY_LIST",compActores)
+    catalogo["best count"]= lt.newList('SINGLE_LINKED',compBCount)
+    catalogo["vote_average"]= lt.newList('SINGLE_LINKED',compVAverage
     return catalogo
 
 
 def nueva_entrada_pelicula(ID):
 
-    pelicula={"ID":0, "pelicula":None}
+    pelicula={"ID":0, "pelicula":None"votacion":None, "calificacion":None}
     pelicula["ID"]=ID
     pelicula["pelicula"]=lt.newList("SINGLE_LINKED",compIDpelicula)
+    pelicula["vote_count"] = lt.newList('SINGLE_LINKED',compBCount) 
+    pelicula["vote_average"]= lt.newList('SINGLE_LINKED',compVAverage) 
 
     return pelicula
 
 
 def nuevo_actor(nombre):
 
-    actor={"nombre": "","ref_peliculas":None,"Promedio peliculas ":0.0, "Director con mas colaboraciones: " , ""}
+    actor ={"nombre": "","ref_peliculas":None,"Promedio peliculas ":0.0, "Director con mas colaboraciones: " , ""}
     actor["nombre"]=nombre
     actor["ref_peliculas"]=lt.newList('ARRAY_LIST',compIDpelicula)
     actor["Promedio peliculas "]=lt.newList('ARRAY_LIST',compIDpelicula)
     actor["Director con mas colaboraciones:"]=lt.newList('ARRAY_LIST',compIDpelicula)
+    
 
-    return director
+    return actor
 
 def nuevo_genero(nombre_genero):
     
-    genero={"nombre":"", "peliculas":None, "promedio":0}
+    genero={"nombre":"", "peliculas":None, "promedio":0,"votacion":None, "calificacion":None}
     genero["nombre"]=nombre_genero
     genero["peliculas"]=lt.newList("SINGLE_LINKED",compGenero)
+    genero["vote_count"] = lt.newList('SINGLE_LINKED',compBCount) 
+    genero["vote_average"]= lt.newList('SINGLE_LINKED',compVAverage) 
 
 
 # agreagar catalagos 
@@ -102,7 +109,7 @@ def promedio_actor(catalogo, nombre_actor):
     return promedio
 
 
-def obtener_peeliculas_x_actor(catalogo, nombreDirector):
+def obtener_peeliculas_x_actor(catalogo, nombreActor):
     nombres=lt.newList('SINGLE_LINKED',compActores)
     for i in range(1,lt.size(catalogo["actores"])):
         actor=lt.getElement(catalogo["actores"],i)
@@ -115,6 +122,151 @@ def obtener_peeliculas_x_actor(catalogo, nombreDirector):
         info_actor= lt.getElement(catalogo["actores"],posicion_actor)
         return info_actor
     return None
+
+
+
+
+
+
+
+
+#requerimientos 
+
+
+
+
+
+def ranking_peliculas(catalogo,peliculas)-> list:
+    respuesta1=[]
+    best_count=[]
+    worts_average=[]
+    respuesta1.append("BEST COUNT : ",best_count,
+    ,"---","5 WORST AVERAGE : ",worts_average)
+    lista_f={}
+    filas= len(catalogo["peliculas"])
+    columnas=0
+    
+    if filas>0:
+        columnas=len(catalogo["peliculas"])
+        
+    for i in range(filas):
+        for j in range(columnas): 
+
+
+          dic= {}
+          nombre= peliculas["nombres"]
+        
+          dic[nombre] =  pelicula["vote_count"]
+          v=list(dic.values())
+          k=list(dic.keys())
+          r_bc= insertionsort(k)
+          best_count.append( dic )
+
+          
+    
+    for i in range(filas):
+        for j in range(columnas): 
+
+
+          dic= {}
+          nombre= peliculas["nombres"]
+        
+          dic[nombre] =  pelicula["vote_average"]
+          v=list(dic.values())
+          k=list(dic.keys())
+          r_wa= insertionsort(k)
+          best_count.append( dic )
+          worts_average.append( dic )
+
+    #falta ordenar los resultados de mayor a menor
+    respuesta2 = {}
+    respuesta2["BEST COUNT"] =r_bc
+    respuesta2["vote_average"] =r_wa
+
+
+ 
+    return "ordenados", respuesta2  ,"sin ordenar --> " , respuesta1
+
+
+def conocer_actor(catalogo,actores, peliculas,nombreActor):
+
+    resultados= {}
+
+    filas= len(catalogo["actores"])
+    columnas=0
+    
+    if filas>0:
+        columnas=len(catalogo["actores"])
+        
+    for i in range(filas):
+        for j in range(columnas): 
+             
+             lista_peliculas_x_actor= []
+             lista_peliculas_x_actor.append(obtener_peeliculas_x_actor(catalogo , nombreActor))
+             resultados["peliculas en las que participo"] = lista_peliculas_x_actor
+             resultados["Numero de peliculas que participo"] = len(lista_peliculas_x_actor)
+             resultados["Promedio de sus peliculas"] = promedio_actor(catalogo, nombreActor)
+             resultados["director con mas colaboraciones"] = actor["Director con mas colaboraciones"]
+
+    return resultados   
+
+
+
+
+def ranking_genero(catalogo,peliculas)-> list:
+    respuesta1=[]
+    best_count=[]
+    worts_average=[]
+    respuesta1.append("BEST COUNT : ",best_count,
+    ,"---","5 WORST AVERAGE : ",worts_average)
+    lista_f={}
+    filas= len(catalogo["generos"])
+    columnas=0
+    
+    if filas>0:
+        columnas=len(catalogo["generos"])
+        
+    for i in range(filas):
+        for j in range(columnas): 
+
+
+          dic= {}
+          nombre= genero["nombre"]
+        
+          dic[nombre] =  genero["vote_count"]
+          v=list(dic.values())
+          k=list(dic.keys())
+          r_bc= insertionsort(k)
+          best_count.append( dic )
+
+          
+    
+    for i in range(filas):
+        for j in range(columnas): 
+
+
+          dic= {}
+          nombre= genero["nombre"]
+        
+          dic[nombre] =  genero["vote_average"]
+          v=list(dic.values())
+          k=list(dic.keys())
+          r_wa= insertionsort(k)
+          best_count.append( dic )
+          worts_average.append( dic )
+
+    #falta ordenar los resultados de mayor a menor
+    respuesta2 = {}
+    respuesta2["BEST COUNT"] =r_bc
+    respuesta2["vote_average"] =r_wa
+
+
+ 
+    return "ordenados", respuesta2  ,"sin ordenar --> " , respuesta1
+
+
+
+    
 
 #Funciones de comparacion
 
@@ -160,3 +312,11 @@ def compareRecordIds (recordA, recordB):
     elif int(recordA['id']) > int(recordB['id']):
         return 1
     return -1
+
+def compBCount(voto1,voto2):
+    if (voto1 == voto2):
+        return 0
+    elif voto1 > voto2:
+        return 1
+    else:
+        return -1
