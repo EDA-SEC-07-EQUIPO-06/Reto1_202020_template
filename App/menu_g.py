@@ -33,10 +33,40 @@ import csv
 from ADT import list as lt
 from DataStructures import listiterator as it
 from DataStructures import liststructure as lt
+from Sorting import insertionsort 
 
 from time import process_time 
 
 
+
+
+## archivos 
+peliculas = "theMoviesdb/movies-small-d.csv"
+actores = "theMoviesdb/movies-small-d.csv"
+
+#Print
+def print_actores(actor, puntaje):
+   
+    if actor:
+        print("Actor encontrado: " + actores["nombre"])
+        print("Promedio de peliculas: " + str(puntaje))
+        print("Total peliculas: "+ str(lt.size(actores["ref_peliculas"])))
+        print("Director con mas colaboraciones: "+ )
+        #falta editar
+        Lista = (actor["ref_peliculas"])
+        iterator = it.newIterator(Lista)
+        while it.hasNext(iterator):
+            diccionarioID=it.next(iterator)
+            llave=diccionarioID["pelicula"]
+            for i in range(1):
+                datos=lt.getElement(llave,i)
+                titulo=datos["original_title"]
+                print("Titulo: "+ titulo)
+    else:
+        print("No encontro actor")
+
+
+# menu principal
 
 def printMenu():
     """
@@ -50,38 +80,6 @@ def printMenu():
     print("5- Entender un genero")
     print("6- Crear ranking")
     print("0- Salir")
-
-
-
-
-def compareRecordIds (recordA, recordB):
-    if int(recordA['id']) == int(recordB['id']):
-        return 0
-    elif int(recordA['id']) > int(recordB['id']):
-        return 1
-    return -1
-
-
-
-def loadCSVFile (file, cmpfunction):
-    lst=lt.newList("ARRAY_LIST", cmpfunction)
-    dialect = csv.excel()
-    dialect.delimiter=";"
-    try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row: 
-                lt.addLast(lst,elemento)
-    except:
-        print("Hubo un error con la carga del archivo")
-    return lst
-
-
-def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
-    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
-    return lst
-
 
 def main():
     """
@@ -108,17 +106,23 @@ def main():
                 pass
 
             elif int(inputs[0])==4: #opcion 4
-                pass
+                nombre_actor = input("Ingrese nombre actor: ")
+                infoActor=controlador.obteneractor_peliculas_x_actor(cont, nombre_actor)
+                puntaje= controlador.promedioActor(cont, nombreActor)
+                print_actores(infoActor, puntaje)
 
             elif int(inputs[0])==3: #opcion 5
                 pass
 
             elif int(inputs[0])==4: #opcion 6
-                pass
+
+                nombre_genero = input("Ingrese nombre genero: ")
+               
 
 
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
-                
+
+           
 if __name__ == "__main__":
     main()
