@@ -199,3 +199,5 @@ def promedio_x_actor(catalogo, nombre_actor):
 
     calificacion =modelo.actor_promedio(catalogo, nombre_actor)
     return calificacion
+
+    
